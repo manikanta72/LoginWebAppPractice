@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Auth Dashboard</title>
+
+<!-- Lottie -->
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+* {
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    transition: background 0.4s, color 0.4s;
+}
+
+/* THEMES */
+body.light {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #222;
+}
+
+body.dark {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: #f5f5f5;
+}
+
+/* TOGGLE */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    font-size: 22px;
+    z-index: 10;
+}
+
+/* CARD */
+.card {
+    width: 360px;
+    padding: 30px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.35);
+    animation: pop 0.9s ease;
+}
+
+@keyframes pop {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #ff7eb3;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 18px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, #ff512f, #dd2476);
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+}
+
+.switch {
+    margin-top: 15px;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.message {
+    margin-top: 15px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.success { color: #00ffcc; }
+.error { color: #ffd1d1; }
+
+/* DASHBOARD */
+.dashboard {
+    text-align: center;
+    animation: fadeIn 1.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+
+<body class="light">
+
+<div class="theme-toggle" onclick="toggleTheme()">🌓</div>
+
+<div class="center">
+    <div class="card" id="app">
+
+        <h2 id="title">Login</h2>
+
+        <input id="email" placeholder="Email">
+        <input id="password" type="password" placeholder="Password">
+
+        <button onclick="submit()">Login</button>
+
+        <div class="switch" onclick="toggleMode()">
+            Don’t have an account? Register
+        </div>
+
+        <div class="message" id="msg"></div>
+
+    </div>
+</div>
+
+<script>
+let isLogin = true;
+let theme = "light";
+
+/* THEME TOGGLE */
+function toggleTheme() {
+    theme = theme === "light" ? "dark" : "light";
+    document.body.className = theme;
+}
+
+/* LOGIN / REGISTER SWITCH */
+function toggleMode() {
+    isLogin = !isLogin;
+    document.getElementById("title").innerText = isLogin ? "Login" : "Register";
+    document.querySelector("button").innerText = isLogin ? "Login" : "Register";
+    document.querySelector(".switch").innerText =
+        isLogin ? "Don’t have an account? Register" : "Already have an account? Login";
+    document.getElementById("msg").innerText = "";
+}
+
+/* SUBMIT */
+function submit() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const msg = document.getElementById("msg");
+
+    if (!email || !password) {
+        msg.innerText = "Please fill all fields";
+        msg.className = "message error";
+        return;
+    }
+
+    const url = isLogin ? "/api/login" : "/api/register";
+
+    fetch(url, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ email, password })
+    })
+    .then(res => {
+        if (!res.ok) throw new Error("Request failed");
+        return isLogin ? res.json() : res.text();
+    })
+    .then(data => {
+        if (isLogin) {
+            localStorage.setItem("token", data.token);
+            showDashboard(data.email);
+        } else {
+            msg.innerText = data;
+            msg.className = "message success";
+        }
+    })
+    .catch(() => {
+        msg.innerText = "Invalid credentials or server error";
+        msg.className = "message error";
+    });
+}
+
+/* DASHBOARD */
+function showDashboard(email) {
+    const name = email.split("@")[0];
+
+    document.getElementById("app").innerHTML = `
+        <div class="dashboard">
+            <lottie-player
+                src="https://assets10.lottiefiles.com/packages/lf20_jcikwtux.json"
+                background="transparent"
+                speed="1"
+                style="width:200px;height:200px;margin:auto"
+                loop autoplay>
+            </lottie-player>
+
+            <h2>Welcome, ${name} 👋</h2>
+            <p>You are logged in successfully</p>
+
+            <button onclick="logout()">Logout</button>
+        </div>
+    `;
+}
+
+/* LOGOUT */
+function logout() {
+    localStorage.removeItem("token");
+    location.reload();
+}
+</script>
+
+</body>
+</html>
