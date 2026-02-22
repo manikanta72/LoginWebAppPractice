@@ -58,52 +58,68 @@ VS Code
 
 Postman
 
-MySQL Workbench
-🗄️ Database Schema
-CREATE TABLE users (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-🔐 API Endpoints
 📝 Register
+
 POST /api/register
+
 {
+
   "email": "user@test.com",
   "password": "123456"
+  
 }
+
 🔑 Login (JWT)
+
 POST /api/login
+
 {
+
   "email": "user@test.com",
   "password": "123456"
+  
 }
 
 Response
 
 {
+
   "token": "eyJhbGciOiJIUzI1NiJ9...",
   "email": "user@test.com"
+  
 }
 📊 Dashboard (Protected)
+
 GET /api/dashboard
+
 Authorization: Bearer <JWT_TOKEN>
+
 ▶️ How to Run the Project
+
 1️⃣ Clone Repository
+
 git clone https://github.com/your-username/authdemo.git
+
 cd authdemo
+
 2️⃣ Configure MySQL
 
 Update application.properties:
 
 spring.datasource.url=jdbc:mysql://localhost:3306/auth_db
+
 spring.datasource.username=root
+
 spring.datasource.password=YOUR_PASSWORD
+
 3️⃣ Run Application
+
 mvn spring-boot:run
+
 4️⃣ Open UI
+
 http://localhost:8083
+
 🎨 UI Preview
 
 Animated login & register card
@@ -145,6 +161,7 @@ Created a modern UI without frameworks
 👨‍💻 Author
 
 Baswa Siva Manikanta
+
 Backend Developer | Java | Spring Boot
 
 📧 Email:baswamani67@gmail.com
