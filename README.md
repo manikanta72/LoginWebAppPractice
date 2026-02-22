@@ -59,29 +59,6 @@ VS Code
 Postman
 
 MySQL Workbench
-
-📂 Project Structure
-authdemo
-├── src/main/java
-│   └── com/example/authdemo
-│       ├── controller
-│       │   ├── AuthController.java
-│       │   └── DashboardController.java
-│       ├── entity
-│       │   └── User.java
-│       ├── repository
-│       │   └── UserRepository.java
-│       ├── security
-│       │   └── JwtUtil.java
-│       └── config
-│           └── SecurityConfig.java
-│
-├── src/main/resources
-│   ├── application.properties
-│   └── static
-│       └── index.html
-│
-└── pom.xml
 🗄️ Database Schema
 CREATE TABLE users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
