@@ -56,38 +56,6 @@ Tools
 
 VS Code
 
-Postman
-
-📝 Register
-
-POST /api/register
-
-{
-
-  "email": "user@test.com",
-  "password": "123456"
-  
-}
-
-🔑 Login (JWT)
-
-POST /api/login
-
-{
-
-  "email": "user@test.com",
-  "password": "123456"
-  
-}
-
-Response
-
-{
-
-  "token": "eyJhbGciOiJIUzI1NiJ9...",
-  "email": "user@test.com"
-  
-}
 📊 Dashboard (Protected)
 
 GET /api/dashboard
