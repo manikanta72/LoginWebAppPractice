@@ -52,16 +52,6 @@ Lottie Animations
 
 Dark / Light Theme
 
-Tools
-
-VS Code
-
-📊 Dashboard (Protected)
-
-GET /api/dashboard
-
-Authorization: Bearer <JWT_TOKEN>
-
 ▶️ How to Run the Project
 
 1️⃣ Clone Repository
